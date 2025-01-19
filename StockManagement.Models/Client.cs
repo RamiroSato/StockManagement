@@ -19,11 +19,14 @@ namespace StockManagement.Models;
 public class Client
 {
     public Guid ClientID { get; set; }
+    public IEnumerable<PreOrder>? PreOrders { get; set; }
+    public IEnumerable<Wishlist>? Wishlists { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string Email { get; set; }
     public required string Phone { get; set; }
     public required string Address { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     public bool Active { get; set; }
 }

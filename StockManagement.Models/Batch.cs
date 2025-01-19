@@ -16,8 +16,9 @@ CREATE TABLE Batch (
 public class Batch
 {
     public required Guid BatchID { get; set; }
+    public IEnumerable<BatchItem>? BatchItems { get; set; }
     public required string BatchNumber { get; set; }
-    public required Warehouse warehouse { get; set; }
+    public required Warehouse Warehouse { get; set; }
     public required DateTime ProductionDate { get; set; }
     public required DateTime CreatedAt { get; set; }
     public bool Active { get; set; }

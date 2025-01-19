@@ -4,8 +4,7 @@ namespace StockManagement.Models;
 
 public class User
 {
-    public Guid ID { get; set; }
-    public int RoleID { get; set; }
+    public Guid UserID { get; set; }
     public required UserRole Role { get; set; }
     public required string Username { get; set; }
     public required string PasswordHash { get; set; }

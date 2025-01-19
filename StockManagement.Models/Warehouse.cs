@@ -16,6 +16,7 @@ namespace StockManagement.Models;
 public class Warehouse
 {
     public Guid WarehouseID { get; set; }
+    public IEnumerable<Batch>? Batches { get; set; }
     public required string WarehouseName { get; set; }
     public string? Location { get; set; }
     public DateTime CreatedAt { get; set; }

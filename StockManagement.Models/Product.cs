@@ -20,8 +20,10 @@ CREATE TABLE Product (
 public class Product
 {
     public Guid ProductID { get; set; }
+    public IEnumerable<BatchItem>? BatchItems { get; set; }
+    public IEnumerable<Wishlist>? Wishlists { get; set; }
     public required string ProductName { get; set; }
-    public required ProductType productType { get; set; }
+    public required ProductType ProductType { get; set; }
     public decimal Price { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }

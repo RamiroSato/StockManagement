@@ -17,6 +17,7 @@ namespace StockManagement.Models;
 public class BatchItem
 {
     public Guid BatchItemID { get; set; }
+    public IEnumerable<PreOrderItem>? PreOrderItems { get; set; }
     public required Batch Batch { get; set; }
     public required Product Product { get; set; }
     public int Quantity { get; set; }
