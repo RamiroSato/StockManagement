@@ -17,6 +17,7 @@ public class Order
     public Guid OrderID { get; set; }
     public int OrderNumber { get; set; }
     public required PreOrder PreOrder { get; set; }
+    public Guid PreOrderID { get; set; }
     public DateTime? OrderDate { get; set; }
     public required string Status { get; set; }
     public DateTime? CreatedAt { get; set; }

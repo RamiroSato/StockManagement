@@ -19,6 +19,7 @@ public class Batch
     public IEnumerable<BatchItem>? BatchItems { get; set; }
     public required string BatchNumber { get; set; }
     public required Warehouse Warehouse { get; set; }
+    public required Guid WarehouseId { get; set; }
     public required DateTime ProductionDate { get; set; }
     public required DateTime CreatedAt { get; set; }
     public bool Active { get; set; }

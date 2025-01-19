@@ -24,6 +24,7 @@ public class Product
     public IEnumerable<Wishlist>? Wishlists { get; set; }
     public required string ProductName { get; set; }
     public required ProductType ProductType { get; set; }
+    public required Guid ProductTypeId { get; set; }
     public decimal Price { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }

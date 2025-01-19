@@ -4,7 +4,7 @@ namespace StockManagement.Models;
 
 public class UserRole
 {
-    public int RoleID { get; set; }
+    public int UserRoleID { get; set; }
     public required string RoleName { get; set; }
 
     public  IEnumerable<User>? Users { get; set; }

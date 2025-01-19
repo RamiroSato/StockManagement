@@ -1,6 +1,8 @@
 using System;
 using System.Data;
+using System.Drawing;
 using Microsoft.EntityFrameworkCore;
+using StockManagement.Data.Seeds;
 using StockManagement.Models;
 
 namespace StockManagement.Data.Contexts;
@@ -33,79 +35,28 @@ public class StockManagementContext : DbContext
 
     #endregion
 
-    #region Properties
-
-    public DbSet<UserRole> UserRoles
-    {
-        get
-        {
-            if (userRoles == null)
-            {
-                throw new DataException("UserRoles DbSet is not initialized");
-            }
-            return userRoles;
-        }
-        set => userRoles = value;
-    }
-
-    public DbSet<User> Users
-    {
-        get
-        {
-            if (users == null)
-            {
-                throw new DataException("Users DbSet is not initialized");
-            }
-            return users;
-        }
-        set => users = value;
-    }
-
-    public DbSet<ProductType> ProductTypes
-    {
-        get
-        {
-            if (productTypes == null)
-            {
-                throw new DataException("ProductTypes DbSet is not initialized");
-            }
-            return productTypes;
-        }
-        set => productTypes = value;
-    }
-
-    public DbSet<Product> Products
-    {
-        get
-        {
-            if (products == null)
-            {
-                throw new DataException("Products DbSet is not initialized");
-            }
-            return products;
-        }
-        set => products = value;
-    }
-
-    public DbSet<Warehouse> Warehouses
-    {
-        get
-        {
-            if (warehouses == null)
-            {
-                throw new DataException("Warehouses DbSet is not initialized");
-            }
-            return warehouses;
-        }
-        set => warehouses = value;
-    }
-
-    #endregion
-
     #region Constructors
     public StockManagementContext(DbContextOptions<StockManagementContext> options) : base(options)
     {
     }
+
+    #endregion
+
+    #region Properties
+
+    public DbSet<UserRole>? UserRoles { get => userRoles; set => userRoles = value; }
+    public DbSet<Warehouse>? Warehouses { get => warehouses; set => warehouses = value; }
+    public DbSet<ProductType>? ProductTypes { get => productTypes; set => productTypes = value; }
+    public DbSet<Client>? Clients { get => clients; set => clients = value; }
+    public DbSet<Batch>? Batches { get => batches; set => batches = value; }
+    public DbSet<Product>? Products { get => products; set => products = value; }
+    public DbSet<PreOrder>? PreOrders { get => preOrders; set => preOrders = value; }
+    public DbSet<User>? Users { get => users; set => users = value; }
+    public DbSet<BatchItem>? BatchItems { get => batchItems; set => batchItems = value; }
+    public DbSet<Wishlist>? Wishlists { get => wishlists; set => wishlists = value; }
+    public DbSet<PreOrderItem>? PreOrderItems { get => preOrderItems; set => preOrderItems = value; }
+    public DbSet<Order>? Orders { get => orders; set => orders = value; }
+    public DbSet<Transaction>? Transactions { get => transactions; set => transactions = value; }
     #endregion
 
     #region Methods
@@ -116,9 +67,9 @@ public class StockManagementContext : DbContext
         #region Entidades Depenencia 0
         modelBuilder.Entity<UserRole>(u =>
         {
-            u.HasKey(u => u.RoleID);
+            u.HasKey(u => u.UserRoleID);
             u.Property(u => u.RoleName).IsRequired();
-            u.Property(u => u.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            u.Property(u => u.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             u.Property(u => u.UpdatedAt);
             u.Property(u => u.Active).HasDefaultValue(true);
         });
@@ -129,7 +80,7 @@ public class StockManagementContext : DbContext
             w.Property(w => w.WarehouseID).ValueGeneratedOnAdd();
 
             w.Property(w => w.WarehouseName).IsRequired();
-            w.Property(w => w.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            w.Property(w => w.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             w.Property(w => w.UpdatedAt);
             w.Property(w => w.Active).HasDefaultValue(true);
         });
@@ -141,7 +92,7 @@ public class StockManagementContext : DbContext
 
             p.Property(p => p.TypeName).IsRequired();
             p.Property(p => p.Description).IsRequired();
-            p.Property(p => p.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            p.Property(p => p.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             p.Property(p => p.UpdatedAt);
             p.Property(p => p.Active).HasDefaultValue(true);
         });
@@ -156,7 +107,7 @@ public class StockManagementContext : DbContext
             c.Property(c => c.Email).IsRequired();
             c.Property(c => c.Phone).IsRequired();
             c.Property(c => c.Address).IsRequired();
-            c.Property(c => c.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            c.Property(c => c.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             c.Property(c => c.UpdatedAt);
             c.Property(c => c.Active).HasDefaultValue(true);
         });
@@ -179,15 +130,15 @@ public class StockManagementContext : DbContext
 
             //u.Property(u => u.RoleID).IsRequired();
 
-            u.Property(u => u.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            u.Property(u => u.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             u.Property(u => u.UpdatedAt);
 
             u.Property(u => u.Active).HasDefaultValue(true);
 
-            u.HasOne(u => u.Role)
+            u.HasOne(u => u.UserRole)
                 .WithMany(r => r.Users)
-                .HasForeignKey(u => u.Role);
+                .HasForeignKey(u => u.UserRoleID);
         });
 
         modelBuilder.Entity<Batch>(b =>
@@ -200,13 +151,13 @@ public class StockManagementContext : DbContext
 
             b.Property(b => b.ProductionDate).IsRequired();
 
-            b.Property(b => b.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            b.Property(b => b.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             b.Property(b => b.Active).HasDefaultValue(true);
 
             b.HasOne(b => b.Warehouse)
                 .WithMany(w => w.Batches)
-                .HasForeignKey(b => b.Warehouse);
+                .HasForeignKey(b => b.WarehouseId);
         });
 
         modelBuilder.Entity<Product>(p =>
@@ -216,28 +167,37 @@ public class StockManagementContext : DbContext
 
             p.Property(p => p.ProductName).IsRequired();
             p.Property(p => p.Description).IsRequired();
-            p.Property(p => p.Price).IsRequired();
-            p.Property(p => p.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            p.Property(p => p.Price).IsRequired().HasConversion<decimal>();
+            p.Property(p => p.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
             p.Property(p => p.UpdatedAt);
             p.Property(p => p.Active).HasDefaultValue(true);
 
             p.HasOne(p => p.ProductType)
                 .WithMany(pt => pt.Products)
-                .HasForeignKey(p => p.ProductType);
+                .HasForeignKey(p => p.ProductTypeId);
         });
 
-        modelBuilder.Entity<PreOrder>(p =>
+        modelBuilder.Entity<PreOrder>(po =>
         {
-            p.HasKey(p => p.PreOrderID);
-            p.Property(p => p.PreOrderID).ValueGeneratedOnAdd();
+            po.HasKey(p => p.PreOrderID);
+            po.Property(p => p.PreOrderID).ValueGeneratedOnAdd();
 
-            p.Property(p => p.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            po.Property(p => p.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
-            p.Property(p => p.Active).HasDefaultValue(true);
+            po.Property(p => p.Active).HasDefaultValue(true);
 
-            p.HasOne(p => p.Client)
+            po.HasOne(p => p.Client)
                 .WithMany(c => c.PreOrders)
-                .HasForeignKey(p => p.Client);
+                .HasForeignKey(p => p.ClientID);
+
+            po.HasOne(po => po.Transaction)
+                .WithOne(t => t.PreOrder)
+                .HasForeignKey<Transaction>(t => t.PreOrderID);
+            
+            po.HasOne(po => po.Order)
+                .WithOne(o => o.PreOrder)
+                .HasForeignKey<Order>(o => o.PreOrderID);
+
         });
 
         #endregion
@@ -251,17 +211,17 @@ public class StockManagementContext : DbContext
 
             bi.Property(bi => bi.Quantity).IsRequired();
 
-            bi.Property(bi => bi.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            bi.Property(bi => bi.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             bi.Property(bi => bi.Active).HasDefaultValue(true);
 
             bi.HasOne(bi => bi.Batch)
                 .WithMany(b => b.BatchItems)
-                .HasForeignKey(bi => bi.Batch);
+                .HasForeignKey(bi => bi.BatchId);
 
             bi.HasOne(bi => bi.Product)
                 .WithMany(p => p.BatchItems)
-                .HasForeignKey(bi => bi.Product);
+                .HasForeignKey(bi => bi.ProductID);
         });
 
         modelBuilder.Entity<Wishlist>(w =>
@@ -269,18 +229,18 @@ public class StockManagementContext : DbContext
             w.HasKey(w => w.WishlistID);
             w.Property(w => w.WishlistID).ValueGeneratedOnAdd();
 
-            w.Property(w => w.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            w.Property(w => w.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             w.Property(w => w.Active).HasDefaultValue(true);
 
             w.HasOne(w => w.Client)
                 .WithMany(c => c.Wishlists)
-                .HasForeignKey(w => w.Client);
+                .HasForeignKey(w => w.ClientID);
 
             w.HasMany(w => w.Products)
                 .WithMany(p => p.Wishlists)
                 .UsingEntity(j => j.ToTable("WishlistProducts"));
-            
+
         });
 
         modelBuilder.Entity<PreOrderItem>(poi =>
@@ -290,17 +250,17 @@ public class StockManagementContext : DbContext
 
             poi.Property(poi => poi.Quantity).IsRequired();
 
-            poi.Property(poi => poi.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            poi.Property(poi => poi.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             poi.Property(poi => poi.Active).HasDefaultValue(true);
 
             poi.HasOne(poi => poi.PreOrder)
                 .WithMany(po => po.PreOrderItems)
-                .HasForeignKey(poi => poi.PreOrder);
+                .HasForeignKey(poi => poi.PreOrderID);
 
             poi.HasOne(poi => poi.BatchItem)
                 .WithMany(bi => bi.PreOrderItems)
-                .HasForeignKey(poi => poi.BatchItem);
+                .HasForeignKey(poi => poi.BatchItemID);
         });
 
         modelBuilder.Entity<Order>(o =>
@@ -308,16 +268,13 @@ public class StockManagementContext : DbContext
             o.HasKey(o => o.OrderID);
             o.Property(o => o.OrderID).ValueGeneratedOnAdd();
 
-            o.Property(o => o.OrderNumber).IsRequired().ValueGeneratedOnAdd();
+            o.Property(o => o.OrderNumber).IsRequired().UseIdentityColumn();
             o.HasIndex(o => o.OrderNumber).IsUnique();
 
-            o.Property(o => o.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            o.Property(o => o.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             o.Property(o => o.Active).HasDefaultValue(true);
 
-            o.HasOne(o => o.PreOrder)
-                .WithOne(po => po.Order)
-                .HasForeignKey<Order>(o => o.PreOrder);
         });
 
         modelBuilder.Entity<Transaction>(t =>
@@ -326,18 +283,20 @@ public class StockManagementContext : DbContext
             t.Property(t => t.TransactionID).ValueGeneratedOnAdd();
 
             t.Property(t => t.TransactionDate).IsRequired();
+            t.Property(t => t.Amount).IsRequired().HasConversion<decimal>();
 
-            t.Property(t => t.CreatedAt).IsRequired().HasDefaultValue(DateTime.Now);
+            t.Property(t => t.CreatedAt).IsRequired().HasDefaultValueSql("GETDATE()");
 
             t.Property(t => t.Active).HasDefaultValue(true);
 
-            t.HasOne(t => t.PreOrder)
-            .WithOne(po => po.Transaction)
-            .HasForeignKey<Transaction>(t => t.PreOrder);
-
         });
-        
-        
+
+
+        #endregion
+
+        #region Seeds
+        modelBuilder.ApplyConfiguration(new UserRoleSeed());
+
         #endregion
     }
 

@@ -17,8 +17,9 @@ public class PreOrder
 {
     public Guid PreOrderID { get; set; }
     public required Client Client { get; set; }
+    public Guid ClientID { get; set; }
     public IEnumerable<PreOrderItem>? PreOrderItems { get; set; }
-    public Order? Order { get; set; }  
+    public Order? Order { get; set; }
     public Transaction? Transaction { get; set; }
     public DateTime PreOrderDate { get; set; }
     public required string Status { get; set; }

@@ -17,6 +17,7 @@ public class Wishlist
     public Guid WishlistID { get; set; }
     public required string Name { get; set; }
     public required Client Client { get; set; }
+    public required Guid ClientID { get; set; }
     public required IEnumerable<Product> Products { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool Active { get; set; }

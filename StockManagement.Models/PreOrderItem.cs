@@ -19,7 +19,9 @@ public class PreOrderItem
 {
     public required Guid PreOrderItemID { get; set; }
     public required PreOrder PreOrder { get; set; }
+    public required Guid PreOrderID { get; set; }
     public required BatchItem BatchItem { get; set; }
+    public required Guid BatchItemID { get; set; }
     public required int Quantity { get; set; }
     public required DateTime CreatedAt { get; set; }
     public bool Active { get; set; }

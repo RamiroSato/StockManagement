@@ -19,7 +19,8 @@ CREATE TABLE Transactions (
 public class Transaction
 {
     public Guid TransactionID { get; set; }
-    public required PreOrder PreOrder { get; set; }
+    public PreOrder? PreOrder { get; set; }
+    public required Guid PreOrderID { get; set; }
     public DateTime? TransactionDate { get; set; }
     public decimal Amount { get; set; }
     public required string PaymentMethod { get; set; }
