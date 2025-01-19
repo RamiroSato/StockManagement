@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StockManagement.Data\StockManagement.Data.csproj" />
+    <ProjectReference Include="..\StockManagement.Exceptions\StockManagement.Exceptions.csproj" />
+    <ProjectReference Include="..\StockManagement.Interfaces\StockManagement.Interfaces.csproj" />
+    <ProjectReference Include="..\StockManagement.Models\StockManagement.Models.csproj" />
+  </ItemGroup>
+
 </Project>
